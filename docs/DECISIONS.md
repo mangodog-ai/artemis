@@ -1,0 +1,22 @@
+# Decision log
+
+Record confirmed decisions here. Use **Proposed** for working assumptions and **Open** for unresolved questions.
+
+## 2026-11-04 — Project direction and platform
+
+- **Status:** Proposed, pending implementation decisions.
+- **Context:** The user described a new project, first as car insurance and then corrected it to life insurance. They confirmed Australia as the launch market.
+- **Decision:** Treat the product as an Australia-focused life insurance comparison app.
+- **Platform direction:** GitHub repository mangodog-ai/artemis; Vercel hosting; Supabase database; Microsoft Entra ID as the source of app identity/permissions.
+- **Working implementation proposal:** Next.js + TypeScript, Supabase Auth Microsoft/Azure provider, Supabase Postgres with RLS.
+- **Open:** Audience/access boundary, role/group model, comparison inputs and cover categories, insurer/product data source, quote/live pricing capability, personal/health data needs, business model, and regulatory positioning.
+- **Reasoning:** The hosting/database/identity preferences are user-stated. The framework and auth flow are initial proposals because no scaffold or provider configuration exists yet.
+
+## Decision template
+
+### YYYY-MM-DD — Short title
+
+- **Status:** Proposed / Accepted / Rejected / Superseded.
+- **Context:** What choice needed to be made?
+- **Decision:** What was chosen?
+- **Consequences:** What changes or constraints follow?
