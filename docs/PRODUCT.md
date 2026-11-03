@@ -12,6 +12,7 @@ Not yet confirmed. Possible audiences include consumers comparing cover, adviser
 
 People need a trustworthy way to compare life cover when product definitions, pricing assumptions, exclusions, and eligibility differ. The app should make those differences visible rather than reducing the decision to a single price.
 
+
 ## MVP outcome
 
 A user with permitted access can select or enter a defined set of comparison assumptions, view comparable life cover options, understand key differences and limitations, and see when and how each item of data was obtained.
