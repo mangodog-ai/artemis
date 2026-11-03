@@ -2,6 +2,12 @@
 
 Status labels: **Candidate** means proposed for consideration; **Blocked on decision** means scope depends on an unresolved product or data decision; **Later** means explicitly outside the first thin slice for now.
 
+## Starter site
+
+- [x] Under-construction home page with a sign-in entry point.
+- [x] Login screen placeholder for invited Microsoft account users.
+- [ ] Connect login to Entra ID and enforce the approved tenant and role policy.
+
 ## MVP candidates
 
 - [ ] Entra ID sign-in and sign-out, with access restricted to the approved tenant/audience.

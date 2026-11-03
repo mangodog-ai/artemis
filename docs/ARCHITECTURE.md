@@ -2,6 +2,8 @@
 
 ## Current proposal
 
+The starter frontend uses the Next.js App Router with React. The landing page and login screen are currently static UI; there is no auth callback, Supabase client, or database integration yet.
+
     User browser
         |
         v

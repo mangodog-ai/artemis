@@ -4,7 +4,7 @@
 
 - Artemis is a new Australia-focused life insurance comparison app.
 - Planned hosting is Vercel; planned database is Supabase Postgres; app identity and access permissions are expected to come from Microsoft Entra ID.
-- This repository currently contains project documents only. Do not assume an application framework has been scaffolded or that cloud services are configured.
+- The frontend is scaffolded with Next.js App Router and JavaScript. The landing page and login screen are UI only; do not assume cloud services or authentication are configured.
 - Product scope and quote sourcing are unresolved. See docs/PRODUCT.md and docs/FEATURES.md before making product assumptions.
 
 ## Working rules

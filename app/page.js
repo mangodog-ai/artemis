@@ -28,14 +28,14 @@ function PolicyPreview() {
       <div className="preview-card">
         <div className="preview-heading">
           <div>
-            <span className="micro-label">A clearer picture</span>
+            <span className="micro-label">Concept preview</span>
             <h2>Cover, side by side.</h2>
           </div>
           <span className="sparkle" aria-hidden="true">✳</span>
         </div>
         <div className="cover-amount">
-          <span>Life cover</span>
-          <strong>$750,000</strong>
+          <span>Build a comparison around</span>
+          <strong>Your priorities</strong>
           <div className="amount-line"><i /></div>
         </div>
         <div className="preview-options">

@@ -10,8 +10,15 @@ Artemis is a new app to compare life insurance in Australia. The user initially 
 - Hosting: Vercel
 - Database: Supabase
 - Identity and permissions: Microsoft Entra ID
-- Proposed app stack: Next.js + TypeScript (not yet confirmed or scaffolded)
+- App stack: Next.js App Router + React (starter scaffold created; JavaScript for now)
 - Proposed Entra connection: Supabase Auth Microsoft/Azure provider (not yet configured or validated for required role/group claims)
+
+## Current implementation
+
+- The home page says the service is under construction and links to /login.
+- The /login page shows a Microsoft sign-in control as unavailable until Entra authentication is configured.
+- No real authentication, comparison data, or insurer integrations are implemented.
+- This environment does not currently have Node.js/npm available, so the app could not be run locally here.
 
 ## Product guardrails
 

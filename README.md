@@ -8,7 +8,7 @@ This is a new project. Product scope, quote sources, customer access model, and 
 
 ## Planned platform
 
-- Next.js and TypeScript, deployed on Vercel.
+- Next.js App Router and React, deployed on Vercel (the starter is JavaScript).
 - Supabase Postgres for application data, with Row Level Security for data access controls.
 - Microsoft Entra ID for sign-in and app access. The initial integration direction is Supabase Auth's Microsoft/Azure provider; role and group authorization still needs validation.
 - GitHub repository: [mangodog-ai/artemis](https://github.com/mangodog-ai/artemis).
@@ -17,7 +17,9 @@ These are the current working choices, not a deployed or configured system.
 
 ## Getting started
 
-The application scaffold has not been created yet. Before implementation, agree on the MVP decisions listed in [the product brief](docs/PRODUCT.md).
+Requires Node.js 20.9 or newer. Run npm install once, then npm run dev and open http://localhost:3000. The /login route is a visual placeholder; Microsoft Entra authentication is not connected yet.
+
+Before adding comparison flows or collecting personal information, agree on the MVP decisions listed in [the product brief](docs/PRODUCT.md).
 
 ## Project memory
 
