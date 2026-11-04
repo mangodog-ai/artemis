@@ -13,6 +13,13 @@ Record confirmed decisions here. Use **Proposed** for working assumptions and **
 - **Open:** Audience/access boundary, role/group model, comparison inputs and cover categories, insurer/product data source, quote/live pricing capability, personal/health data needs, business model, and regulatory positioning.
 - **Reasoning:** The hosting/database/identity preferences are user-stated. The framework and auth flow are initial proposals because no scaffold or provider configuration exists yet.
 
+### 2026-11-04 — Initial Entra access boundary
+
+- **Status:** Accepted for the initial authentication implementation.
+- **Context:** The login placeholder needed a concrete access boundary before connecting identity.
+- **Decision:** Use single-tenant Microsoft Entra ID sign-in, require users to be assigned to the enterprise application, leave the landing and login pages public, and require a session for `/account`.
+- **Consequences:** Authentication is implemented directly with a server-side OAuth/OIDC flow. No app roles or group-based authorization are configured; all assigned users receive the same basic access. Credentials are supplied through server-only environment variables and configured in Entra/Vercel using [the setup run sheet](./ENTRA_SETUP.md).
+
 ## Decision template
 
 ### YYYY-MM-DD — Short title

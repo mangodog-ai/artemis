@@ -108,16 +108,23 @@ h1 em { color: #748748; font-style: normal; }
 .login-card h1 { font-size: 37px; line-height: 1.15; letter-spacing: -.065em; }
 .login-copy { max-width: 310px; margin: 17px auto 25px; color: var(--muted); font-size: 13px; line-height: 1.65; }
 .microsoft-button { width: 100%; min-height: 50px; display: flex; align-items: center; justify-content: flex-start; gap: 12px; padding: 0 13px; border: 1px solid #e1e5dc; border-radius: 9px; background: #f7f8f3; color: #64716b; font-size: 12px; font-weight: 600; }
-.microsoft-button:disabled { cursor: not-allowed; }
+.microsoft-button:not(:disabled) { cursor: pointer; }
+.microsoft-button:not(:disabled):hover { border-color: #b7c595; background: #f1f5e8; }
+.microsoft-button:focus-visible { outline: 3px solid #a3c640; outline-offset: 3px; }
 .microsoft-mark { width: 16px; height: 16px; display: grid; grid-template: 1fr 1fr / 1fr 1fr; gap: 2px; }
 .microsoft-mark i:nth-child(1) { background: #f25022; }
 .microsoft-mark i:nth-child(2) { background: #7fba00; }
 .microsoft-mark i:nth-child(3) { background: #00a4ef; }
 .microsoft-mark i:nth-child(4) { background: #ffb900; }
-.soon-label { margin-left: auto; color: #9a9f99; font-size: 9px; font-weight: 500; }
+.auth-notice, .auth-error { margin: 0; padding: 12px; border-radius: 9px; font-size: 12px; line-height: 1.5; }
+.auth-notice { background: #f7f8f3; color: var(--muted); }
+.auth-error { margin-top: 12px; background: #fff0ed; color: #8d3023; }
 .back-link { display: inline-block; margin-top: 23px; color: #718077; font-size: 11px; font-weight: 600; }
 .back-link:hover { color: var(--ink); }
 .login-footer { margin: 0; color: #89948e; font-size: 10px; }
+.account-card h1 { font-size: 32px; }
+.account-card .login-copy { overflow-wrap: anywhere; }
+.sign-out-button { justify-content: center; }
 
 @media (max-width: 900px) {
   .site-shell { width: min(100% - 48px, 680px); }

@@ -6,7 +6,7 @@ Build an Australia-focused app that helps users compare life insurance cover. Co
 
 ## Intended users
 
-Not yet confirmed. Possible audiences include consumers comparing cover, advisers or brokers preparing comparisons, and internal staff maintaining product data. Entra ID suggests an organization-controlled access model, but whether the app is internal-only or customer-facing remains open.
+Not yet confirmed. Possible audiences include consumers comparing cover, advisers or brokers preparing comparisons, and internal staff maintaining product data. The initial access boundary is single-tenant Entra sign-in for assigned users; the intended audience and any role-based permissions remain open.
 
 ## Problem to solve
 
@@ -28,7 +28,7 @@ A user with permitted access can select or enter a defined set of comparison ass
 ## MVP decisions to resolve
 
 - Who uses the app: consumers, advisers, internal operations, or a combination?
-- Is access restricted to one Entra tenant? Which Entra app roles or groups grant access, and who administers them?
+- Which Entra app roles or groups grant access beyond the initial assigned-user sign-in, and who administers them?
 - What does “compare” mean in the first release: public product information, manually supplied sample premiums, indicative pricing, or insurer-backed personal quotes?
 - Which life cover types are in scope: term life, total and permanent disability, trauma, income protection, or bundled products?
 - Will users provide personal/health information? If so, at what stage, for what purpose, and how will consent, retention, deletion, and access be handled?

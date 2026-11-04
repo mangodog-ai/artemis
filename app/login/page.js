@@ -1,11 +1,34 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions, isAzureAuthConfigured } from "../../lib/auth";
+import SignInButton from "./sign-in-button";
 
 export const metadata = {
   title: "Log in — Artemis",
   description: "Sign in to Artemis.",
 };
 
-export default function LoginPage() {
+const authErrors = {
+  AccessDenied: "This account isn't assigned access to Artemis. Contact your administrator.",
+  Configuration: "Sign-in isn't configured yet. Contact your administrator.",
+  OAuthCallback: "Microsoft sign-in couldn't be completed. Please try again or contact your administrator.",
+  OAuthSignin: "We couldn't start Microsoft sign-in. Please try again.",
+};
+
+export default async function LoginPage({ searchParams }) {
+  const configured = isAzureAuthConfigured();
+  const session = configured ? await getServerSession(authOptions) : null;
+  if (session?.user) {
+    redirect("/account");
+  }
+
+  const params = await searchParams;
+  const error =
+    typeof params?.error === "string"
+      ? authErrors[params.error] ??
+        "Sign-in couldn't be completed. Please try again or contact your administrator."
+      : null;
   return (
     <main className="login-shell">
       <Link className="brand login-brand" href="/">
@@ -22,15 +45,16 @@ export default function LoginPage() {
         <p className="eyebrow">Welcome to Artemis</p>
         <h1>Your clearer view<br />is coming soon.</h1>
         <p className="login-copy">
-          Sign-in is being set up. When access opens, you’ll use your invited work account.
+          Sign in with your invited work account to access Artemis.
         </p>
-        <button className="microsoft-button" type="button" disabled>
-          <span className="microsoft-mark" aria-hidden="true">
-            <i /><i /><i /><i />
-          </span>
-          Continue with Microsoft
-          <span className="soon-label">Coming soon</span>
-        </button>
+        {configured ? (
+          <SignInButton />
+        ) : (
+          <p className="auth-notice" role="status">
+            Microsoft sign-in is not configured yet. Contact your administrator.
+          </p>
+        )}
+        {error && <p className="auth-error" role="alert">{error}</p>}
         <Link className="back-link" href="/">← Back to home</Link>
       </section>
       <p className="login-footer">Thoughtful cover. Clearer choices.</p>

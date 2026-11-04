@@ -6,11 +6,11 @@ Status labels: **Candidate** means proposed for consideration; **Blocked on deci
 
 - [x] Under-construction home page with a sign-in entry point.
 - [x] Login screen placeholder for invited Microsoft account users.
-- [ ] Connect login to Entra ID and enforce the approved tenant and role policy.
+- [x] Connect login to single-tenant Entra ID; require enterprise-app assignment and protect `/account`.
 
 ## MVP candidates
 
-- [ ] Entra ID sign-in and sign-out, with access restricted to the approved tenant/audience.
+- [x] Entra ID sign-in and sign-out, restricted to the configured tenant and assigned users.
 - [ ] Authorization mapped to explicitly approved Entra app roles or groups.
 - [ ] A comparison flow with a small, agreed set of inputs and plain-language explanations.
 - [ ] A side-by-side view of supported life cover options, showing covered amount, premiums (when available), key terms, exclusions, and assumptions.

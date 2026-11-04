@@ -11,14 +11,16 @@ Artemis is a new app to compare life insurance in Australia. The user initially 
 - Database: Supabase
 - Identity and permissions: Microsoft Entra ID
 - App stack: Next.js App Router + React (starter scaffold created; JavaScript for now)
-- Proposed Entra connection: Supabase Auth Microsoft/Azure provider (not yet configured or validated for required role/group claims)
+- Entra integration: NextAuth Microsoft Azure AD OpenID Connect provider, with a pinned single-tenant authority and assigned-user access
+- Auth implementation details and Azure/Vercel setup: docs/ENTRA_SETUP.md
 
 ## Current implementation
 
 - The home page says the service is under construction and links to /login.
-- The /login page shows a Microsoft sign-in control as unavailable until Entra authentication is configured.
-- No real authentication, comparison data, or insurer integrations are implemented.
-- This environment does not currently have Node.js/npm available, so the app could not be run locally here.
+- /login offers Microsoft sign-in when the required environment variables are present; otherwise it explains that setup is incomplete.
+- /account requires a server-side authenticated session. Enterprise-app assignment is configured in Entra; no app roles or group-based authorization are implemented.
+- Entra credentials and NEXTAUTH_SECRET must stay in server-only Vercel environment variables and ignored local .env.local files; never commit them.
+- Supabase, comparison data, and insurer integrations are not connected.
 
 ## Product guardrails
 

@@ -10,14 +10,14 @@ This is a new project. Product scope, quote sources, customer access model, and 
 
 - Next.js App Router and React, deployed on Vercel (the starter is JavaScript).
 - Supabase Postgres for application data, with Row Level Security for data access controls.
-- Microsoft Entra ID for sign-in and app access. The initial integration direction is Supabase Auth's Microsoft/Azure provider; role and group authorization still needs validation.
+- Microsoft Entra ID for single-tenant sign-in by assigned users. Authentication uses a server-side OAuth flow; app roles and authorization are not yet configured.
 - GitHub repository: [mangodog-ai/artemis](https://github.com/mangodog-ai/artemis).
 
-These are the current working choices, not a deployed or configured system.
+Supabase remains a planned data platform and is not connected yet. Entra authentication requires the portal setup in [the Entra run sheet](docs/ENTRA_SETUP.md).
 
 ## Getting started
 
-Requires Node.js 20.9 or newer. Run npm install once, then npm run dev and open http://localhost:3000. The /login route is a visual placeholder; Microsoft Entra authentication is not connected yet.
+Requires Node.js 20.9 or newer. Copy `.env.example` to `.env.local`, configure the values as described in [the Entra run sheet](docs/ENTRA_SETUP.md), run `npm install`, then `npm run dev` and open http://localhost:3000. `/account` is protected and redirects unauthenticated visitors to `/login`.
 
 Before adding comparison flows or collecting personal information, agree on the MVP decisions listed in [the product brief](docs/PRODUCT.md).
 
