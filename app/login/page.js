@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions, isAzureAuthConfigured } from "../../lib/auth";
+import { createSupabaseServerClient } from "../../lib/supabase/server";
+import { isSupabaseConfigured } from "../../lib/supabase/config";
 import SignInButton from "./sign-in-button";
 
 export const metadata = {
@@ -11,16 +11,23 @@ export const metadata = {
 
 const authErrors = {
   AccessDenied: "This account isn't assigned access to Artemis. Contact your administrator.",
-  Configuration: "Sign-in isn't configured yet. Contact your administrator.",
-  OAuthCallback: "Microsoft sign-in couldn't be completed. Please try again or contact your administrator.",
-  OAuthSignin: "We couldn't start Microsoft sign-in. Please try again.",
+  Callback: "Microsoft sign-in couldn't be completed. Please try again or contact your administrator.",
+  Configuration: "Microsoft sign-in isn't configured yet. Contact your administrator.",
 };
 
 export default async function LoginPage({ searchParams }) {
-  const configured = isAzureAuthConfigured();
-  const session = configured ? await getServerSession(authOptions) : null;
-  if (session?.user) {
-    redirect("/account");
+  const configured = isSupabaseConfigured();
+  if (configured) {
+    const supabase = await createSupabaseServerClient();
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    if (error && error.name !== "AuthSessionMissingError") {
+      throw error;
+    }
+
+    if (user) {
+      redirect("/compare");
+    }
   }
 
   const params = await searchParams;

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "../../lib/require-user";
 import SignOutButton from "../login/sign-out-button";
+import { createSupabaseServerClient } from "../../lib/supabase/server";
 
 export const metadata = {
   title: "Your account — Artemis",
@@ -11,6 +12,14 @@ export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
   const user = await requireUser();
+  const supabase = await createSupabaseServerClient();
+  const { data: isAdmin, error } = await supabase.rpc("is_artemis_admin");
+
+  if (error) {
+    throw error;
+  }
+
+  const name = user.user_metadata?.full_name ?? user.user_metadata?.name;
 
   return (
     <main className="login-shell">
@@ -26,9 +35,14 @@ export default async function AccountPage() {
       <section className="login-card account-card">
         <span className="login-symbol" aria-hidden="true">✳</span>
         <p className="eyebrow">Signed in to Artemis</p>
-        <h1>Welcome{user.name ? `, ${user.name}` : ""}.</h1>
+        <h1>Welcome{name ? `, ${name}` : ""}.</h1>
         {user.email && <p className="login-copy">{user.email}</p>}
-        <p className="login-copy">Your comparison workspace is being prepared.</p>
+        <p className="login-copy">Compare source-backed product details and save your private comparison history.</p>
+        <div className="account-actions">
+          <Link className="primary-button" href="/compare">Start a comparison <span aria-hidden="true">↗</span></Link>
+          <Link className="account-link" href="/comparisons">View saved comparisons</Link>
+          {isAdmin && <Link className="account-link" href="/admin/catalog">Manage provider data</Link>}
+        </div>
         <SignOutButton />
         <Link className="back-link" href="/">← Back to home</Link>
       </section>

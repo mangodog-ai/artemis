@@ -1,87 +1,134 @@
-# Microsoft Entra ID setup run sheet
+# Microsoft Entra ID and Supabase run sheet
 
-This configures single-tenant Microsoft sign-in for assigned users. The landing
-page and `/login` remain public; `/account` requires a valid Artemis session.
-There are no app roles yet, so every user assigned to the enterprise application
-gets the same sign-in access. Do not use this as authorization for future
-comparison data or administrative actions without adding server-side role checks.
+The app uses Supabase Auth as the session broker for the existing single-tenant
+Entra application. Users must be assigned to the Entra enterprise app. Supabase
+Auth creates the verified session used by Postgres Row Level Security (RLS);
+the app does not use a Supabase service-role key.
 
-## 1. Register the application
+## 1. Configure the Entra app registration
 
-1. Open the [Microsoft Entra admin center](https://entra.microsoft.com/) and go
-   to **Identity → Applications → App registrations → New registration**.
-2. Name the app `Artemis`.
-3. Under supported account types, choose **Accounts in this organizational
-   directory only (Single tenant)**.
-4. Under **Redirect URI**, choose **Web** and add both:
-   - `http://localhost:3000/api/auth/callback/azure-ad`
-   - `https://artemis-mrai.vercel.app/api/auth/callback/azure-ad`
-5. Select **Register**. From **Overview**, copy the **Application (client) ID**
-   and **Directory (tenant) ID**.
+1. In the [Microsoft Entra admin center](https://entra.microsoft.com/), open
+   **Identity → Applications → App registrations → Artemis**.
+2. Under **Authentication**, add a **Web** redirect URI for the Supabase Auth
+   callback:
+   `https://<your-project-ref>.supabase.co/auth/v1/callback`
+3. Keep the application single-tenant. In **Enterprise applications**, keep
+   **Assignment required?** set to **Yes**, and assign the permitted users or
+   groups. Invited external users must accept their guest invitation and be
+   assigned.
+4. Under **Certificates & secrets → Client secrets**, create a secret. Copy
+   the **Value** (not the Secret ID) when configuring the Supabase provider.
+   Record its expiry and rotate before it expires.
+5. To provide a verified-email indicator, add the following optional claims to
+   the app registration manifest's `optionalClaims` object. Merge these into
+   existing entries rather than replacing other configured claims:
 
-If the production hostname changes, update the redirect URI here and set
-`NEXTAUTH_URL` to that same canonical HTTPS origin in Vercel.
+   ```json
+   {
+     "idToken": [
+       { "name": "xms_edov", "source": null, "essential": false, "additionalProperties": [] },
+       { "name": "email", "source": null, "essential": false, "additionalProperties": [] }
+     ],
+     "accessToken": [
+       { "name": "xms_edov", "source": null, "essential": false, "additionalProperties": [] }
+     ],
+     "saml2Token": []
+   }
+   ```
 
-## 2. Create and assign access
+No Microsoft Graph API permission is required. The app requests the OIDC
+`email` scope and does not call Graph.
 
-1. In the app registration, open **Certificates & secrets → Client secrets →
-   New client secret**. Set a description and an expiry that matches your
-   organization's credential-rotation policy.
-2. Copy the secret **Value** immediately. It is shown only once; the **Secret
-   ID** is not the value the app needs.
-3. Open the app's **Enterprise application** (from the registration overview or
-   **Identity → Applications → Enterprise applications**).
-4. Under **Properties**, set **Assignment required?** to **Yes**, then save.
-5. Under **Users and groups**, assign only the people or groups that should be
-   able to sign in. With no app roles configured, assign the default access.
-6. Under **App registrations → Artemis → API permissions**, no Microsoft Graph
-   permission is required for this sign-in flow. The app requests only the
-   standard OpenID Connect `openid`, `profile`, and `email` scopes; it does not
-   call Microsoft Graph.
+## 2. Configure Supabase Auth with Azure
 
-Do not enable implicit ID/access token grants. The app uses the server-side
-authorization-code flow.
+1. In Supabase, open **Authentication → Sign In / Providers → Azure** and
+   enable the provider.
+2. Enter the Entra **Application (client) ID** and the client secret **Value**.
+   Store the secret in Supabase's provider configuration; do not put it in
+   Vercel or the application.
+3. Set **Azure Tenant URL** to
+   `https://login.microsoftonline.com/<your-directory-tenant-id>` to pin
+   authentication to the intended tenant. Do not leave it set to `common`.
+4. Save the provider.
+5. Under **Authentication → URL Configuration**, set the production **Site
+   URL** to `https://<your-production-host>`. Add these **Redirect URLs**:
+   - `http://localhost:3000/auth/callback`
+   - `https://<your-production-host>/auth/callback`
+   - Any exact Vercel preview callback URLs used for testing. Avoid broad
+     wildcard entries unless their security implications are understood.
 
-## 3. Store credentials safely
+Supabase's Azure callback is the URI registered in Entra in step 1. The
+application callback (`/auth/callback`) is where Supabase redirects after
+processing its OAuth response.
 
-The app reads server-only environment variables. None use a `NEXT_PUBLIC_`
-prefix, and no credentials belong in source control.
+## 3. Configure application environment
 
-| Variable | Value | Sensitive |
+The app needs the project's URL and publishable key only. Both are intended for
+browser use; database authorization is enforced by RLS.
+
+| Variable | Value | Secret |
 | --- | --- | --- |
-| `NEXTAUTH_URL` | `http://localhost:3000` locally; canonical HTTPS app origin in Vercel | No |
-| `NEXTAUTH_SECRET` | Generate a unique random value with `openssl rand -base64 32` | Yes |
-| `AZURE_AD_TENANT_ID` | Directory (tenant) ID from the registration overview | No |
-| `AZURE_AD_CLIENT_ID` | Application (client) ID from the registration overview | No |
-| `AZURE_AD_CLIENT_SECRET` | Client secret **Value** copied in step 2 | Yes |
+| `NEXT_PUBLIC_SUPABASE_URL` | Project URL from **Project Settings → API** | No |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Project publishable key from **Project Settings → API Keys** | No |
 
-- **Local development:** put these values in `.env.local` (copy
-  `.env.example` as a template). `.env.local` is ignored by Git. Keep it on a
-  trusted, encrypted device; do not paste secret values into chat, tickets, or
-  commits.
-- **Vercel:** add the variables in **Project → Settings → Environment
-  Variables** for **Production**. Mark `NEXTAUTH_SECRET` and
-  `AZURE_AD_CLIENT_SECRET` as **Sensitive** where the plan supports it, limit
-  project access, and redeploy after changing values. Vercel is the runtime
-  secret store; do not add them as build-time public variables.
-- Do not share production credentials with Preview deployments. If preview
-  sign-in is needed, create a separate Entra registration and secret with its
-  own exact redirect URI and Vercel Preview variables.
-- Keep the Entra secret's expiry in an owner-maintained calendar or secret
-  manager. To rotate it, add a new secret, update the Vercel value, redeploy and
-  test sign-in, then remove the old secret before it expires.
+- **Local:** copy `.env.example` to `.env.local` and set both values.
+  `.env.local` is ignored by Git.
+- **Vercel:** add both values to the intended environments under **Project →
+  Settings → Environment Variables**, then redeploy.
+- Do not add a service-role/secret key, Entra client secret, or database
+  password to the app environment.
 
-## 4. Verify the setup
+After confirming the new Supabase-based sign-in works, remove the old
+`NEXTAUTH_*` and `AZURE_AD_*` application environment variables from Vercel.
+You can then remove the obsolete Entra callback URI ending in
+`/api/auth/callback/azure-ad`.
 
-1. Run `npm run dev`, then open `http://localhost:3000/login`.
-2. Select **Continue with Microsoft** and sign in with an assigned account from
-   the configured tenant. Confirm the browser returns to `/account`.
-3. Sign out and confirm `/account` redirects to `/login`.
-4. Try an account not assigned to the enterprise app; Entra should deny access.
-5. After setting the Production variables, redeploy and repeat the test at the
-   production hostname.
+## 4. Apply the comparison database migration
 
-If sign-in is rejected, confirm the tenant ID, client ID and secret **Value**,
-the exact callback URI, assignment-required setting, user/group assignment,
-`NEXTAUTH_URL`, and `NEXTAUTH_SECRET`. Never put secret values in diagnostic
-logs.
+Apply
+[`supabase/migrations/20261104000000_comparison_engine.sql`](../supabase/migrations/20261104000000_comparison_engine.sql)
+to the configured Supabase project using the SQL Editor or the Supabase CLI.
+The migration creates the provider catalog, source-backed product/cover data,
+private comparison history and result snapshots, RLS policies, and admin
+functions.
+
+The migration seeds only provider names (Medibank, AHM, TAL) and cover-type
+labels. It does not seed products, policy terms, or prices. Add only authorized,
+source-backed product facts. Price examples must include the exact assumptions
+and source; the comparison engine shows a price only for an exact match.
+
+### Grant catalog-entry access
+
+After the intended administrator has signed in once, find their UUID under
+**Authentication → Users** and add it to the private admin allow-list in the
+SQL Editor:
+
+```sql
+insert into public.artemis_admins (user_id)
+values ('<supabase-auth-user-uuid>')
+on conflict (user_id) do nothing;
+```
+
+Only this explicit database allow-list can add or verify provider catalog
+records. Users cannot edit their own admin status through the application.
+
+## 5. Verify deployment
+
+1. Confirm the Azure provider is enabled and pinned to the correct tenant.
+2. Confirm the Entra app has the Supabase Auth callback URI and assigned users.
+3. Confirm the Supabase migration has been applied.
+4. Set the two public Supabase environment variables in Vercel and redeploy.
+5. Sign in at `/login`; confirm the browser returns to `/compare`.
+6. Confirm a signed-out request to `/compare` redirects to sign-in.
+7. Save a comparison and confirm it appears in `/comparisons`; sign in as a
+   different assigned user and confirm the first user's comparison is not
+   visible.
+8. Add an administrator through the SQL allow-list, enter a draft catalog
+   record at `/admin/catalog`, verify its source, then confirm only the verified
+   entry appears in new comparisons.
+
+The comparison form stores cover type, amount, age, state, and premium basis
+after the user accepts the notice. It does not ask for health, smoking, or
+occupation details. Users can delete their own saved comparisons. Set and
+review the broader privacy, retention, backup, and deletion policy before
+production use with real customer data.

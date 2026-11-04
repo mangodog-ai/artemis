@@ -11,16 +11,18 @@ Artemis is a new app to compare life insurance in Australia. The user initially 
 - Database: Supabase
 - Identity and permissions: Microsoft Entra ID
 - App stack: Next.js App Router + React (starter scaffold created; JavaScript for now)
-- Entra integration: NextAuth Microsoft Azure AD OpenID Connect provider, with a pinned single-tenant authority and assigned-user access
-- Auth implementation details and Azure/Vercel setup: docs/ENTRA_SETUP.md
+- Entra integration: Supabase Auth Azure provider, pinned to the single tenant, with assigned-user access
+- Auth, database, and Vercel setup: docs/ENTRA_SETUP.md
 
 ## Current implementation
 
 - The home page says the service is under construction and links to /login.
-- /login offers Microsoft sign-in when the required environment variables are present; otherwise it explains that setup is incomplete.
-- /account requires a server-side authenticated session. Enterprise-app assignment is configured in Entra; no app roles or group-based authorization are implemented.
-- Entra credentials and NEXTAUTH_SECRET must stay in server-only Vercel environment variables and ignored local .env.local files; never commit them.
-- Supabase, comparison data, and insurer integrations are not connected.
+- /login uses Supabase Auth's Azure OAuth flow. Update the Entra callback and Supabase provider before deploying this auth change.
+- Supabase SSR session cookies protect /account, /compare, /comparisons, and /admin.
+- The comparison engine saves cover type, amount, age, state, premium basis, and source-backed result snapshots. RLS isolates history to each signed-in Supabase user.
+- Admin catalog entry and source verification use public.artemis_admins; an admin must be allow-listed in Supabase after signing in.
+- The migration seeds only provider names (Medibank, AHM, TAL) and cover-type labels; no provider product terms or premiums are invented.
+- Supabase secrets remain in the Supabase dashboard; the app uses only the public URL and publishable key. Never commit secrets.
 
 ## Product guardrails
 

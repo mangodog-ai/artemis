@@ -28,14 +28,19 @@ A user with permitted access can select or enter a defined set of comparison ass
 ## MVP decisions to resolve
 
 - Who uses the app: consumers, advisers, internal operations, or a combination?
-- Which Entra app roles or groups grant access beyond the initial assigned-user sign-in, and who administers them?
-- What does “compare” mean in the first release: public product information, manually supplied sample premiums, indicative pricing, or insurer-backed personal quotes?
-- Which life cover types are in scope: term life, total and permanent disability, trauma, income protection, or bundled products?
-- Will users provide personal/health information? If so, at what stage, for what purpose, and how will consent, retention, deletion, and access be handled?
+- Who should administer product data? Initial catalog administrators are individually allow-listed in Supabase; group-based administration remains open.
+- What formal privacy notice, retention period, and deletion process should apply before production use with real customer data?
 - What is the business model and next step: self-service information, adviser handoff, referral, or purchase?
-- Which insurer/product sources are available, and what are their permission, freshness, and redistribution terms?
+- Which insurer/product sources are available, and what are their permission, freshness, and redistribution terms? Medibank, AHM, and TAL are name-only initial entries; add other providers only when verified primary sources are available.
 - What is the intended regulatory and compliance position? Obtain qualified Australian review before advice-like features or personal quote flows are built.
 - What launch timeline, team ownership, and operational support are expected?
+
+## Initial comparison behavior
+
+- Compare manually maintained source-backed product facts across life, TPD, trauma, and income protection.
+- Store cover type, amount, age, state, and premium basis with each comparison. Do not collect smoking, occupation, or health details.
+- Show a price only for a verified source example with exactly matching assumptions. The engine does not calculate premiums or imply a sourced amount is an insurer quote.
+- Comparison history is private per Supabase user. Age and state are stored only after acknowledging the notice; users can delete saved comparisons.
 
 ## Success measures (initial proposals)
 

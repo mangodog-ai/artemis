@@ -9,17 +9,17 @@ This is a new project. Product scope, quote sources, customer access model, and 
 ## Planned platform
 
 - Next.js App Router and React, deployed on Vercel (the starter is JavaScript).
-- Supabase Postgres for application data, with Row Level Security for data access controls.
-- Microsoft Entra ID for single-tenant sign-in by assigned users. Authentication uses a server-side OAuth flow; app roles and authorization are not yet configured.
+- Supabase Auth for Microsoft Entra sign-in and Supabase Postgres for application data, with Row Level Security for user-owned comparison history.
+- Microsoft Entra ID is configured as Supabase Auth's single-tenant Azure provider. Admin catalog access is separately allow-listed in the database.
 - GitHub repository: [mangodog-ai/artemis](https://github.com/mangodog-ai/artemis).
 
-Supabase remains a planned data platform and is not connected yet. Entra authentication requires the portal setup in [the Entra run sheet](docs/ENTRA_SETUP.md).
+Supabase and Entra configuration are project-specific and must be completed using [the Entra and Supabase run sheet](docs/ENTRA_SETUP.md). The comparison migration is in [supabase/migrations](supabase/migrations).
 
 ## Getting started
 
-Requires Node.js 20.9 or newer. Copy `.env.example` to `.env.local`, configure the values as described in [the Entra run sheet](docs/ENTRA_SETUP.md), run `npm install`, then `npm run dev` and open http://localhost:3000. `/account` is protected and redirects unauthenticated visitors to `/login`.
+Requires Node.js 20.9 or newer. Copy `.env.example` to `.env.local`, set the Supabase project URL and publishable key, run `npm install`, then `npm run dev` and open http://localhost:3000. `/compare`, saved comparisons, and catalog administration require sign-in.
 
-Before adding comparison flows or collecting personal information, agree on the MVP decisions listed in [the product brief](docs/PRODUCT.md).
+Apply the SQL migration and complete the Azure/Supabase setup before testing sign-in or database features. The initial comparison form stores cover type, amount, age, state, and premium basis; it does not collect health, smoking, or occupation data. It does not generate premiums.
 
 ## Project memory
 
