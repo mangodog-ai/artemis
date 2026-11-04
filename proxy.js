@@ -35,11 +35,12 @@ export async function proxy(request) {
     },
   });
 
-  const { data: { claims }, error } = await supabase.auth.getClaims();
+  const { data, error } = await supabase.auth.getClaims();
   if (error && error.name !== "AuthSessionMissingError") {
     throw error;
   }
 
+  const claims = data?.claims;
   if (!claims?.sub && isProtectedPath(request.nextUrl.pathname)) {
     const loginUrl = new URL("/login", request.url);
     const redirectResponse = NextResponse.redirect(loginUrl);
