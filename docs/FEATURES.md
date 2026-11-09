@@ -14,6 +14,8 @@ need to be completed in the project using [the setup run sheet](ENTRA_SETUP.md).
 
 ## MVP candidates
 
+- [x] Test-only quote lab with encrypted fictional underwriting profile, draft requests, and simulated result storage. It does not submit insurer quotes.
+
 - [ ] Supabase Auth Azure sign-in and sign-out, restricted to the configured tenant and assigned users (awaiting portal migration and Vercel verification).
 - [ ] Authorization mapped to explicitly approved Entra app roles or groups.
 - [x] Per-user comparison storage and RLS; each user can read/delete only their own history.
@@ -27,7 +29,13 @@ need to be completed in the project using [the setup run sheet](ENTRA_SETUP.md).
 
 ## Blocked on product/data decisions
 
-- [ ] Personal quote requests or insurer quote integrations.
+- [ ] Agent-assisted discovery from provider sites, limited to sources that explicitly permit the intended automated use or provide an approved feed/API.
+- [ ] Personal quote retrieval from insurers, enabled only after provider permissions/API agreements and a reviewed consent/data-retention design.
+- [x] Test-only encrypted underwriting profile for fictional sample answers. A production quote profile remains blocked on provider-specific fields, consent, and retention decisions.
+- [ ] Reuse saved assumptions and stored profile answers; never infer or fabricate unanswered quote or underwriting answers.
+- [ ] Show the exact answers and provider, collect separate consent to store and send, and require a final user confirmation before submission.
+- [x] Encrypt test underwriting values at the application layer, keep the key server-only, and restrict access to the profile owner through RLS.
+- [ ] If provider terms or required fields block a quote, stop and offer the official provider link.
 - [ ] Recommendations, rankings, suitability scores, or “best policy” language.
 - [ ] Adviser/broker referral or lead capture.
 - [ ] Application or purchase handoff.
@@ -44,7 +52,8 @@ need to be completed in the project using [the setup run sheet](ENTRA_SETUP.md).
 
 ## Not in scope until explicitly agreed
 
-- Medical underwriting or automated eligibility decisions.
+- Automated medical underwriting or eligibility decisions by Artemis.
 - Binding insurance advice or policy purchase within the app.
 - Claims management.
 - Any representation that a displayed amount is an insurer-approved quote unless the source explicitly confirms it.
+- Automated scraping, scripted quote submission, batch profile probing, or pricing-method discovery on insurer sites without explicit permission.

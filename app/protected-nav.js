@@ -7,6 +7,7 @@ export default function ProtectedNav() {
       <div>
         <Link href="/compare">New comparison</Link>
         <Link href="/comparisons">Saved comparisons</Link>
+        <Link href="/quote-lab">Fictional quote lab</Link>
       </div>
     </nav>
   );

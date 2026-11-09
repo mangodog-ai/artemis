@@ -51,11 +51,15 @@ No Microsoft Graph API permission is required. The app requests the OIDC
    authentication to the intended tenant. Do not leave it set to `common`.
 4. Save the provider.
 5. Under **Authentication → URL Configuration**, set the production **Site
-   URL** to `https://<your-production-host>`. Add these **Redirect URLs**:
+   URL** to `https://artemis-mrai.vercel.app`. Add these **Redirect URLs**:
    - `http://localhost:3000/auth/callback`
-   - `https://<your-production-host>/auth/callback`
+   - `https://artemis-mrai.vercel.app/auth/callback`
    - Any exact Vercel preview callback URLs used for testing. Avoid broad
      wildcard entries unless their security implications are understood.
+
+   If a requested `redirectTo` URL is not allow-listed, Supabase can fall back
+   to the configured Site URL. Keep that Site URL pointed at production rather
+   than `http://localhost:3000`.
 
 Supabase's Azure callback is the URI registered in Entra in step 1. The
 application callback (`/auth/callback`) is where Supabase redirects after
@@ -126,6 +130,17 @@ records. Users cannot edit their own admin status through the application.
 8. Add an administrator through the SQL allow-list, enter a draft catalog
    record at `/admin/catalog`, verify its source, then confirm only the verified
    entry appears in new comparisons.
+
+### If production sign-in returns to localhost
+
+The production login page should send Supabase an application callback of
+`https://artemis-mrai.vercel.app/auth/callback?next=/compare`. If sign-in
+instead ends at `http://localhost:3000`, Supabase is falling back to its Site
+URL because the production callback is not allowed or the Site URL is still
+local. In the same Supabase project used by the deployed app, set the Site URL
+to `https://artemis-mrai.vercel.app`, add the exact production callback to
+Redirect URLs, and save. Keep the localhost callback in Redirect URLs for
+local development only.
 
 The comparison form stores cover type, amount, age, state, and premium basis
 after the user accepts the notice. It does not ask for health, smoking, or

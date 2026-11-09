@@ -24,10 +24,20 @@ Record confirmed decisions here. Use **Proposed** for working assumptions and **
 
 - **Status:** Accepted.
 - **Context:** Save each user's comparisons in Supabase with database-enforced private ownership while retaining Entra as the identity provider.
-- **Decision:** Use Supabase Auth's Azure provider to broker the existing single-tenant Entra app. Compare manually curated, source-backed product information for life, TPD, trauma, and income protection. Store cover type, amount, age, state, and premium basis; do not collect smoking, occupation, or health details. Show a price only for a verified source premium with an exact match to all comparison assumptions; do not calculate prices.
+- **Decision:** Use Supabase Auth's Azure provider to broker the existing single-tenant Entra app. Compare manually curated, source-backed product information for life, TPD, trauma, and income protection. The initial comparison form stores cover type, amount, age, state, and premium basis. Show a price only for a verified source premium with an exact match to all comparison assumptions; do not calculate prices.
 - **Provider scope:** Seed provider-name entries for Medibank, AHM, and TAL. Add other providers/products only after source and redistribution rights are verified.
 - **Authorization:** RLS limits comparison history and result snapshots to the signed-in Supabase user. Catalog administration uses a separate database allow-list; entries remain drafts until verified.
 - **Consequences:** Supabase Auth must be configured with the Entra tenant, the Azure callback must point to Supabase, and the comparison SQL migration must be applied. No live insurer integrations or product facts/premiums are included.
+- **Superseded:** The later quote-profile decision permits collecting and storing provider-required underwriting details for future quote requests, after its safeguards are implemented.
+
+### 2026-11-09 — Underwriting profile for future quote retrieval
+
+- **Status:** Accepted product direction; a fictional-data test implementation exists. Production use remains blocked on privacy/security design and provider permission.
+- **Context:** The user wants Artemis to collect and store underwriting details once, then reuse them to reduce repeated data entry when requesting insurer quotes.
+- **Decision:** Allow a future private, user-owned underwriting profile with only the fields needed by a selected provider quote. Obtain distinct affirmative consent to store those answers and to send them to each named provider. Preview exact answers and require confirmation before submission. Do not infer or fabricate answers; never purchase a policy or submit an application.
+- **Security requirements:** The test profile and request snapshots use application-layer encryption, a server-only key, and owner-scoped RLS. Production use additionally needs reviewed consent, key management, access, and retention/deletion controls before real data is stored.
+- **Provider access:** No insurer-site automation until the specific channel has an approved API/feed or written permission. Budget Direct terms expressly prohibit scraping and systematic quote gathering. See docs/QUOTE_AGENT.md.
+- **Supersedes:** The earlier 2026-11-04 decision not to collect smoking, occupation, or health details for the initial comparison inputs. The comparison form remains unchanged; the separate quote lab accepts fictional test answers only.
 
 ## Decision template
 

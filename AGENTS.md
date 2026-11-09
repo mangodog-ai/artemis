@@ -13,7 +13,9 @@
 - Treat insurance pricing, policy terms, eligibility, and underwriting as time-sensitive and source-specific. Store provenance and effective dates for comparison data.
 - Do not invent or imply live quotes, insurer integrations, policy recommendations, or regulatory approval.
 - Compare prices only when a verified source matches all saved assumptions exactly; never calculate or imply a live quote.
-- Minimize collection of health and identity information. Comparison inputs currently include age/state but exclude health, smoking, and occupation. Do not add real personal or health data to fixtures, logs, screenshots, or repository files.
+- Minimize collection of health and identity information. The current quote profile is strictly test-only and accepts fictional data. Do not reuse it for production data until provider-specific fields, separate consent to store/send, encryption/key management, retention/deletion, and access rules are reviewed. Do not add real personal or health data to fixtures, logs, screenshots, or repository files.
+- Do not automate quote retrieval from insurer sites without an approved API/feed or written permission for the specific channel. Budget Direct's published terms prohibit scraping/scripted quote collection; see docs/QUOTE_AGENT.md.
+- The quote lab is test-only and accepts fictional data. Keep underwriting payloads encrypted server-side with UNDERWRITING_ENCRYPTION_KEY; never expose or commit that key. The current quote lab must not send data to insurers or label simulated results as provider quotes.
 - Enforce authorization on the server and in database policies. Hiding a UI element is not an access control.
 - Never commit credentials. Keep local secrets in ignored environment files and maintain a safe .env.example if configuration is introduced.
 - When the app is scaffolded, document commands and run only the checks the user asks for.

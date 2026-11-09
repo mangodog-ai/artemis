@@ -56,3 +56,11 @@ Connect the GitHub repository to Vercel so pull requests can use preview deploym
 - Keep sensitive values out of URLs, telemetry, and routine logs.
 - Define data minimization, retention, deletion, and audit expectations before collecting personal or health data.
 - Review threat model and qualified Australian privacy/insurance obligations before handling real customer data or enabling advice/quote flows.
+
+## Future quote agent boundary
+
+The user has requested storing underwriting details in order to reduce repeated quote entry. Do not connect an LLM or browser agent directly to insurer quote forms yet. First define the private profile, consent, retention, deletion, encryption/key management, and provider access rules in [QUOTE_AGENT.md](./QUOTE_AGENT.md). Use provider-specific deterministic adapters only after an approved API/feed or written permission is recorded. Reuse saved assumptions and user-provided answers, never guess, preview the exact submission, and require final confirmation. Keep quote retrieval separate from purchase/application flows and retain provenance for each quote.
+
+Health and other underwriting answers must be encrypted at the application layer with keys stored outside Postgres and unavailable to browser code, prompts, analytics, and logs. RLS remains mandatory. Do not implement health-data storage until its collection purpose, consent and retention model have been reviewed.
+
+The current test implementation uses AES-256-GCM in server-only Node.js code and stores base64 ciphertext/IV/tag in owner-scoped tables. Configure UNDERWRITING_ENCRYPTION_KEY as a server-only environment variable. The test quote lab stores draft request snapshots and clearly marked simulated results only; it has no provider adapters. See [QUOTE_LAB_SETUP.md](./QUOTE_LAB_SETUP.md).

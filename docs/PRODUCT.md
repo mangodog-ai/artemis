@@ -30,6 +30,8 @@ A user with permitted access can select or enter a defined set of comparison ass
 - Who uses the app: consumers, advisers, internal operations, or a combination?
 - Who should administer product data? Initial catalog administrators are individually allow-listed in Supabase; group-based administration remains open.
 - What formal privacy notice, retention period, and deletion process should apply before production use with real customer data?
+- Which insurers will authorize agent-assisted quote retrieval through an API/partner feed or written permission? Review the provider register in QUOTE_AGENT.md before enabling each connection.
+- What provider-specific underwriting fields, consent wording, retention period, access roles, and deletion behavior should apply to the private quote profile?
 - What is the business model and next step: self-service information, adviser handoff, referral, or purchase?
 - Which insurer/product sources are available, and what are their permission, freshness, and redistribution terms? Medibank, AHM, and TAL are name-only initial entries; add other providers only when verified primary sources are available.
 - What is the intended regulatory and compliance position? Obtain qualified Australian review before advice-like features or personal quote flows are built.
@@ -38,9 +40,11 @@ A user with permitted access can select or enter a defined set of comparison ass
 ## Initial comparison behavior
 
 - Compare manually maintained source-backed product facts across life, TPD, trauma, and income protection.
-- Store cover type, amount, age, state, and premium basis with each comparison. Do not collect smoking, occupation, or health details.
+- Store cover type, amount, age, state, and premium basis with each comparison. The user wants a future quote profile that collects and stores underwriting details; exact fields, consent, security, and retention must be designed before implementation.
 - Show a price only for a verified source example with exactly matching assumptions. The engine does not calculate premiums or imply a sourced amount is an insurer quote.
 - Comparison history is private per Supabase user. Age and state are stored only after acknowledging the notice; users can delete saved comparisons.
+- Reuse stored quote-profile answers only for a provider quote the user requests. Show the exact answers and recipient, and require separate confirmation before sending.
+- Agent-assisted discovery and personalized quote retrieval are separate capabilities. Automated access is blocked until an approved feed/API or written permission is established.
 
 ## Success measures (initial proposals)
 

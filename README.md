@@ -19,7 +19,7 @@ Supabase and Entra configuration are project-specific and must be completed usin
 
 Requires Node.js 20.9 or newer. Copy `.env.example` to `.env.local`, set the Supabase project URL and publishable key, run `npm install`, then `npm run dev` and open http://localhost:3000. `/compare`, saved comparisons, and catalog administration require sign-in.
 
-Apply the SQL migration and complete the Azure/Supabase setup before testing sign-in or database features. The initial comparison form stores cover type, amount, age, state, and premium basis; it does not collect health, smoking, or occupation data. It does not generate premiums.
+Apply the SQL migrations and complete the Azure/Supabase setup before testing sign-in or database features. The comparison form stores cover type, amount, age, state, and premium basis; it does not generate premiums. The signed-in /quote-lab page stores encrypted fictional underwriting profiles, draft requests, and simulated results only. Configure its migration and server-only encryption key using [the quote lab setup guide](docs/QUOTE_LAB_SETUP.md); it does not submit data to insurers.
 
 ## Project memory
 
