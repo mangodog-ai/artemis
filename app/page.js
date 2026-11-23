@@ -72,6 +72,7 @@ export default function Home() {
           <span>artemis</span>
         </Link>
         <div className="nav-right">
+          <Link className="login-link" href="/cycling">Artemis Cycling <span aria-hidden="true">↗</span></Link>
           <span className="nav-status"><i /> In the making</span>
           <Link className="login-link" href="/login">Log in <span aria-hidden="true">↗</span></Link>
         </div>
