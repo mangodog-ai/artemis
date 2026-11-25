@@ -4,7 +4,7 @@ An Australia-focused life insurance comparison app. The initial product directio
 
 ## Project status
 
-This is a new project. Product scope, quote sources, customer access model, and the exact Entra ID authorization model are still being defined. See [the feature list](docs/FEATURES.md), [product brief](docs/PRODUCT.md), and [architecture notes](docs/ARCHITECTURE.md).
+The repository currently contains two product areas: an Australia-focused life insurance app and an early Artemis Cycling dashboard at `/cycling`. Product scope, data sources, customer access models, and authorization are still being defined. See [the feature list](docs/FEATURES.md), [product brief](docs/PRODUCT.md), [architecture notes](docs/ARCHITECTURE.md), and [Cycling architecture](docs/CYCLING_ARCHITECTURE.md).
 
 ## Planned platform
 
@@ -20,6 +20,8 @@ Supabase and Entra configuration are project-specific and must be completed usin
 Requires Node.js 20.9 or newer. Copy `.env.example` to `.env.local`, set the Supabase project URL and publishable key, run `npm install`, then `npm run dev` and open http://localhost:3000. `/compare`, saved comparisons, and catalog administration require sign-in.
 
 Apply the SQL migrations and complete the Azure/Supabase setup before testing sign-in or database features. The comparison form stores cover type, amount, age, state, and premium basis; it does not generate premiums. The signed-in /quote-lab page stores encrypted fictional underwriting profiles, draft requests, and simulated results only. Configure its migration and server-only encryption key using [the quote lab setup guide](docs/QUOTE_LAB_SETUP.md); it does not submit data to insurers.
+
+Artemis Cycling is an illustrative frontend scaffold. Its current activities and charts use synthetic sample data; there is no Strava connection or real account data yet. See [Cycling architecture](docs/CYCLING_ARCHITECTURE.md) for the planned provider boundary and setup decisions.
 
 ## Project memory
 

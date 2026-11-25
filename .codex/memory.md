@@ -2,7 +2,7 @@
 
 ## What we are building
 
-Artemis is a new app to compare life insurance in Australia. The user initially described car insurance and then changed the product to life insurance. Treat life insurance as the current scope.
+Artemis currently has two product areas: an Australia-focused life insurance app and a separate Artemis Cycling experience under `/cycling`. The original insurance scope remains intact. Cycling is an early analysis and forecasting dashboard intended to connect to the user's Strava account later.
 
 ## Intended platform
 
@@ -23,6 +23,7 @@ Artemis is a new app to compare life insurance in Australia. The user initially 
 - Admin catalog entry and source verification use public.artemis_admins; an admin must be allow-listed in Supabase after signing in.
 - /quote-lab is a test-only interface for fictional underwriting profiles, draft requests, and simulated results. Profile and request payloads are AES-256-GCM encrypted server-side; the Supabase migration and server-only UNDERWRITING_ENCRYPTION_KEY must be configured before use. It does not send data to insurer sites.
 - The migration seeds only provider names (Medibank, AHM, TAL) and cover-type labels; no provider product terms or premiums are invented.
+- `/cycling` has overview, analysis, forecast, and activities routes. Its dashboard is illustrative and uses synthetic sample data in `lib/cycling/demo-data.js`; the simple forecast helper is an example surface, not a training plan. No Strava OAuth, sync, or real account data is wired yet. Follow `docs/CYCLING_ARCHITECTURE.md` before adding the provider integration.
 - Supabase secrets remain in the Supabase dashboard; the app uses only the public URL and publishable key. Never commit secrets.
 
 ## Product guardrails
