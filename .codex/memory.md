@@ -23,7 +23,7 @@ Artemis is a project home that launches separate app workspaces. Current entries
 - Admin catalog entry and source verification use public.artemis_admins; an admin must be allow-listed in Supabase after signing in.
 - /quote-lab is a test-only interface for fictional underwriting profiles, draft requests, and simulated results. Profile and request payloads are AES-256-GCM encrypted server-side; the Supabase migration and server-only UNDERWRITING_ENCRYPTION_KEY must be configured before use. It does not send data to insurer sites.
 - The migration seeds only provider names (Medibank, AHM, TAL) and cover-type labels; no provider product terms or premiums are invented.
-- `/cycling` has overview, analysis, forecast, and activities routes. Its dashboard is illustrative and uses synthetic sample data in `lib/cycling/demo-data.js`; the simple forecast helper is an example surface, not a training plan. No Strava OAuth, sync, or real account data is wired yet. Follow `docs/CYCLING_ARCHITECTURE.md` before adding the provider integration.
+- `/cycling` has overview, analysis, forecast, activities and connection/privacy pages. A server-side Strava OAuth import path is implemented, but requires credentials, the Supabase migration, a webhook subscription and support contact before it can connect. Activity records are fetched on demand and not stored permanently. See `docs/CYCLING_ARCHITECTURE.md` and `docs/STRAVA_SETUP.md`.
 - Supabase secrets remain in the Supabase dashboard; the app uses only the public URL and publishable key. Never commit secrets.
 
 ## Product guardrails

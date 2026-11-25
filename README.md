@@ -21,7 +21,7 @@ Requires Node.js 20.9 or newer. Copy `.env.example` to `.env.local`, set the Sup
 
 Apply the SQL migrations and complete the Azure/Supabase setup before testing sign-in or database features. The comparison form stores cover type, amount, age, state, and premium basis; it does not generate premiums. The signed-in /quote-lab page stores encrypted fictional underwriting profiles, draft requests, and simulated results only. Configure its migration and server-only encryption key using [the quote lab setup guide](docs/QUOTE_LAB_SETUP.md); it does not submit data to insurers.
 
-Artemis Cycling is an illustrative frontend scaffold. Its current activities and charts use synthetic sample data; there is no Strava connection or real account data yet. See [Cycling architecture](docs/CYCLING_ARCHITECTURE.md) for the planned provider boundary and setup decisions.
+Artemis Cycling now has a server-side Strava OAuth and on-demand activity import path. Apply the Cycling migration and configure the Strava app values, webhook, support contact and encryption key using [Strava setup](docs/STRAVA_SETUP.md). Until a Strava account is connected, the dashboard shows clearly labeled sample data. Activity records are not stored permanently.
 
 ## Project memory
 

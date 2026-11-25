@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createSupabaseBrowserClient } from "../../lib/supabase/client";
 
-export default function SignInButton() {
+export default function SignInButton({ nextPath = "/compare" }) {
   const [error, setError] = useState("");
 
   async function handleSignIn() {
@@ -14,7 +14,7 @@ export default function SignInButton() {
       provider: "azure",
       options: {
         scopes: "email",
-        redirectTo: `${window.location.origin}/auth/callback?next=/compare`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
       },
     });
 

@@ -1,4 +1,6 @@
 import "./cycling.css";
+import "./strava.css";
+import { CyclingDataProvider } from "./data-provider";
 
 export const metadata = {
   title: "Artemis Cycling — Ride data, in perspective",
@@ -6,5 +8,5 @@ export const metadata = {
 };
 
 export default function CyclingLayout({ children }) {
-  return children;
+  return <CyclingDataProvider>{children}</CyclingDataProvider>;
 }

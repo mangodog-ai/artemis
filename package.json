@@ -9,7 +9,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --test"
+    "test": "node --test",
+    "strava:webhook": "node --env-file=.env.local scripts/register-strava-webhook.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

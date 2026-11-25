@@ -11,9 +11,11 @@ Artemis Cycling is a separate product area in this Next.js app, available at `/c
 
 ## Data and provider boundary
 
-Keep the UI dependent on normalized cycling activity and aggregate types, not Strava response shapes. A future server-side activity repository should be the only layer that reads provider records. A Strava adapter can normalize activities and stream data into the app's internal model, while pages consume that repository. Keep OAuth callback handling, token refresh, and sync jobs in server-only code. Never put access or refresh tokens in browser state, URLs, logs, or client bundles.
+The Strava adapter in `lib/cycling/strava.js` exchanges and refreshes OAuth tokens on the server, encrypts tokens with AES-256-GCM, and normalizes activity summaries. The account connection is owner-scoped through Supabase RPC functions in the Cycling migration. The browser never receives OAuth tokens.
 
-Before enabling a real connection, define the account model, requested OAuth scopes, consent and disconnect behavior, token encryption, retention/deletion, sync cadence, rate-limit handling, and treatment of private activities. Confirm current Strava API requirements and data use terms from official documentation at implementation time. Do not present sample values as connected account data.
+The activity endpoint fetches at most 1,000 cycling activities from the previous 365 days directly from Strava. It returns only the summary fields needed for charts and ride lists. Responses use `no-store`; activity data stays in in-memory page state for up to 24 hours, then must be refreshed. Activity rows and aggregates are not written to Postgres or browser storage. Do not add persistent activity storage or a longer cache without rechecking Strava's current agreement.
+
+The consent page at `/cycling/connect` explains the requested `activity:read_all` scope, data fields, use, retention, and disconnect behavior. Disconnect calls Strava's current token revoke endpoint and deletes the local encrypted connection. The privacy notice is at `/cycling/privacy`. Configure `STRAVA_SUPPORT_EMAIL` before enabling consent; set the same URL as the privacy policy in Strava's application settings. A deauthorization webhook is handled at `/api/strava/webhook/[secret]`; the app requires the Strava subscription ID and database webhook secret to be configured before registering the subscription.
 
 ## Analysis and forecast boundary
 
@@ -21,8 +23,11 @@ Keep descriptive metrics (distance, moving time, elevation, frequency) separate 
 
 ## Next integration steps
 
-1. Decide whether Cycling uses the existing Supabase identity or a separate account boundary.
-2. Register/configure the Strava OAuth client and define secure token storage and disconnection behavior.
-3. Add normalized activity and stream storage with per-user authorization and a sync watermark.
-4. Replace the demo data source with the server-side repository; keep explicit source and sync timestamps.
-5. Implement analysis and forecasting against real, consented history with visible assumptions and limits.
+1. Create a Strava API application. New Strava apps start in single-player mode; Strava currently requires a subscription to create an app.
+2. Apply `supabase/migrations/20261125000000_cycling_strava_connection.sql` and configure the server-only values listed in `STRAVA_SETUP.md`.
+3. Set the Strava callback domain and redirect URI to match the environment. For local development, use `localhost` and `http://localhost:3000/api/strava/callback`.
+4. Sign into Artemis, open `/cycling/connect`, review the notice, and authorize the Strava account.
+5. Register the deauthorization webhook using the instructions in `STRAVA_SETUP.md` before connecting the account.
+6. Recheck Strava's current API agreement, webhook and deletion requirements before making this available beyond personal single-player testing.
+
+The activity summaries are fetched on demand, not stored as a durable archive. Forecasts are exploratory calculations from the most recent four weeks and should retain visible method and assumptions.

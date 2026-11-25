@@ -16,6 +16,11 @@ const authErrors = {
 };
 
 export default async function LoginPage({ searchParams }) {
+  const params = await searchParams;
+  const requestedNext = typeof params?.next === "string" ? params.next : "/compare";
+  const nextPath = requestedNext.startsWith("/") && !requestedNext.startsWith("//") && !requestedNext.includes("\\")
+    ? requestedNext
+    : "/compare";
   const configured = isSupabaseConfigured();
   if (configured) {
     const supabase = await createSupabaseServerClient();
@@ -26,11 +31,10 @@ export default async function LoginPage({ searchParams }) {
     }
 
     if (user) {
-      redirect("/compare");
+      redirect(nextPath);
     }
   }
 
-  const params = await searchParams;
   const error =
     typeof params?.error === "string"
       ? authErrors[params.error] ??
@@ -55,7 +59,7 @@ export default async function LoginPage({ searchParams }) {
           Sign in with your invited work account to access Artemis.
         </p>
         {configured ? (
-          <SignInButton />
+          <SignInButton nextPath={nextPath} />
         ) : (
           <p className="auth-notice" role="status">
             Microsoft sign-in is not configured yet. Contact your administrator.
