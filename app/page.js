@@ -1,108 +1,39 @@
 import Link from "next/link";
+import { projects } from "../lib/projects";
 
-function BrandMark() {
-  return (
-    <span className="brand-mark" aria-hidden="true">
-      <svg viewBox="0 0 36 36" fill="none">
-        <path
-          d="M18 3.5 30 8v9.3c0 7.3-4.9 12.6-12 15.2C10.9 29.9 6 24.6 6 17.3V8l12-4.5Z"
-          stroke="currentColor"
-          strokeWidth="1.7"
-        />
-        <path
-          d="M12 19.4c1.8-3.2 3.8-4.8 6-4.8s4.2 1.6 6 4.8M18 11.2v3.4"
-          stroke="currentColor"
-          strokeWidth="1.7"
-          strokeLinecap="round"
-        />
-      </svg>
-    </span>
-  );
+function ProjectVisual({ type }) {
+  if (type === "cycling") {
+    return <div className="hub-visual hub-cycling" aria-hidden="true"><div className="hub-visual-top"><span>WEEKLY DISTANCE</span><b>+18%</b></div><svg viewBox="0 0 320 100" preserveAspectRatio="none"><path d="M0 80 C35 72 42 81 74 61 S120 67 151 45 190 52 215 32 258 43 286 18 305 22 320 8"/><path d="M0 80 C35 72 42 81 74 61 S120 67 151 45 190 52 215 32 258 43 286 18 305 22 320 8 L320 100 L0 100Z" className="hub-chart-fill"/></svg><div className="hub-chart-labels"><span>8 WEEKS</span><span>ANALYSIS · FORECAST</span></div></div>;
+  }
+  if (type === "insurance") {
+    return <div className="hub-visual hub-insurance" aria-hidden="true"><span className="hub-shield">✳</span><div><b>Clear comparisons</b><small>Cover · terms · context</small></div><span className="hub-visual-arrow">↗</span></div>;
+  }
+  return <div className="hub-visual hub-future" aria-hidden="true"><span>+</span><small>YOUR NEXT IDEA</small></div>;
 }
 
-function PolicyPreview() {
+export default function ProjectHome() {
   return (
-    <div className="preview-wrap" aria-label="Illustration of a life cover comparison">
-      <div className="orbit orbit-one" />
-      <div className="orbit orbit-two" />
-      <div className="preview-card">
-        <div className="preview-heading">
-          <div>
-            <span className="micro-label">Concept preview</span>
-            <h2>Cover, side by side.</h2>
-          </div>
-          <span className="sparkle" aria-hidden="true">✳</span>
-        </div>
-        <div className="cover-amount">
-          <span>Build a comparison around</span>
-          <strong>Your priorities</strong>
-          <div className="amount-line"><i /></div>
-        </div>
-        <div className="preview-options">
-          <div className="option option-featured">
-            <span className="option-icon">A</span>
-            <span><b>Option one</b><small>Flexible cover</small></span>
-            <span className="option-dot" />
-          </div>
-          <div className="option">
-            <span className="option-icon option-icon-alt">B</span>
-            <span><b>Option two</b><small>Level premium</small></span>
-            <span className="option-dot" />
-          </div>
-        </div>
-        <div className="preview-foot">
-          <span className="foot-check">✓</span>
-          <span>Understand the details that matter</span>
-        </div>
-      </div>
-      <div className="floating-note">
-        <span className="note-star">✦</span>
-        <span><b>Clarity first</b><small>Built around you</small></span>
-      </div>
-    </div>
-  );
-}
-
-export default function Home() {
-  return (
-    <main className="site-shell">
-      <nav className="topbar" aria-label="Main navigation">
-        <Link className="brand" href="/" aria-label="Artemis home">
-          <BrandMark />
-          <span>artemis</span>
-        </Link>
-        <div className="nav-right">
-          <Link className="login-link" href="/cycling">Artemis Cycling <span aria-hidden="true">↗</span></Link>
-          <span className="nav-status"><i /> In the making</span>
-          <Link className="login-link" href="/login">Log in <span aria-hidden="true">↗</span></Link>
-        </div>
-      </nav>
-
-      <section className="hero">
-        <div className="hero-copy">
-          <div className="eyebrow"><span className="eyebrow-star">✳</span> A new way to see life cover</div>
-          <h1>Life cover,<br /><em>made clearer.</em></h1>
-          <p className="hero-description">
-            We’re creating a more thoughtful way to explore and compare life insurance in Australia.
-          </p>
-          <div className="construction-pill">
-            <span className="construction-icon" aria-hidden="true">✦</span>
-            <span><b>We’re under construction</b><small>Something good is taking shape.</small></span>
-          </div>
-          <div className="hero-bottom">
-            <Link className="primary-button" href="/login">
-              Log in to Artemis <span aria-hidden="true">↗</span>
-            </Link>
-            <span className="quiet-note">For invited members</span>
-          </div>
-        </div>
-        <PolicyPreview />
+    <main className="project-hub">
+      <header className="hub-header">
+        <Link href="/" className="hub-brand" aria-label="Artemis projects home"><span className="hub-brand-mark">a.</span> ARTEMIS <i>PROJECTS</i></Link>
+        <span className="hub-header-note"><span/> YOUR APP WORKSPACES</span>
+      </header>
+      <section className="hub-intro">
+        <span className="hub-eyebrow">ONE HOME · MANY IDEAS</span>
+        <h1>Choose a <em>project.</em></h1>
+        <p>Each app has its own front page and workspace. Pick up where you left off, or start shaping something new.</p>
       </section>
-
-      <footer className="site-footer">
-        <span>Thoughtful cover. Clearer choices.</span>
-        <span>Made for Australia <i className="footer-sun">✳</i></span>
-      </footer>
+      <section className="hub-projects" aria-label="Your projects">
+        {projects.map((project) => (
+          <Link href={project.href} className={`hub-card hub-card-${project.visual}`} key={project.href}>
+            <div className="hub-card-meta"><span>{project.number} <i>/</i> {project.category}</span><span className="hub-status"><i/>{project.status}</span></div>
+            <ProjectVisual type={project.visual}/>
+            <div className="hub-card-copy"><h2>{project.name}</h2><p>{project.description}</p></div>
+            <div className="hub-card-action"><span>{project.action}</span><b>↗</b></div>
+          </Link>
+        ))}
+      </section>
+      <footer className="hub-footer"><span>ARTEMIS PROJECTS</span><span>Separate spaces for ideas in motion.</span></footer>
     </main>
   );
 }

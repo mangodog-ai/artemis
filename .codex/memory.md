@@ -2,7 +2,7 @@
 
 ## What we are building
 
-Artemis currently has two product areas: an Australia-focused life insurance app and a separate Artemis Cycling experience under `/cycling`. The original insurance scope remains intact. Cycling is an early analysis and forecasting dashboard intended to connect to the user's Strava account later.
+Artemis is a project home that launches separate app workspaces. Current entries are Life Insurance (`/life-insurance` landing page), Artemis Cycling (`/cycling`), and a Project 3 placeholder (`/project-3`). Existing insurance feature routes remain at their current paths. Cycling is an early analysis and forecasting dashboard intended to connect to the user's Strava account later. Follow `docs/PROJECTS.md` when adding project entries.
 
 ## Intended platform
 

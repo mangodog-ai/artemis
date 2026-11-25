@@ -4,7 +4,7 @@ An Australia-focused life insurance comparison app. The initial product directio
 
 ## Project status
 
-The repository currently contains two product areas: an Australia-focused life insurance app and an early Artemis Cycling dashboard at `/cycling`. Product scope, data sources, customer access models, and authorization are still being defined. See [the feature list](docs/FEATURES.md), [product brief](docs/PRODUCT.md), [architecture notes](docs/ARCHITECTURE.md), and [Cycling architecture](docs/CYCLING_ARCHITECTURE.md).
+The root page is an Artemis Projects launcher for separate app workspaces. Current entries are Life Insurance, Artemis Cycling, and a Project 3 placeholder. See the [project home guide](docs/PROJECTS.md), [insurance feature list](docs/FEATURES.md), [product brief](docs/PRODUCT.md), [architecture notes](docs/ARCHITECTURE.md), and [Cycling architecture](docs/CYCLING_ARCHITECTURE.md).
 
 ## Planned platform
 

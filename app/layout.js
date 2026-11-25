@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Artemis",
-  description: "Artemis tools for clearer decisions.",
+  title: "Artemis Projects",
+  description: "Choose a project workspace from Artemis.",
 };
 
 export default function RootLayout({ children }) {
